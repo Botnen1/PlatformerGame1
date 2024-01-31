@@ -13,23 +13,27 @@ class Game:
 
         pygame.display.set_caption('BOT game')
         self.screen = pygame.display.set_mode((800, 600))
+        self.display = pygame.Surface((400, 300)) # This is the surface we will be drawing on //half of screen
+        
+        
+        
         self.clock = pygame.time.Clock()
         
         self.movement = [False, False]
         self.assets = {
             'player': load_image('robot.png')
         }
-        self.player = PhysicsEntity(self, 'player', (200, 400), (8, 15))
+        self.player = PhysicsEntity(self, 'player', (40, 100), (8, 15))
         
         
     def run(self):
         fps = 60
 
         while True:
-            self.screen.fill((14,219,248))
+            self.display.fill((14,219,248))
 
             self.player.update(self.movement[1] - self.movement[0])
-            self.player.render(self.screen)
+            self.player.render(self.display)
             
             
             for event in pygame.event.get():
@@ -46,6 +50,8 @@ class Game:
                         self.movement[0] = False
                     if event.key == pygame.K_RIGHT:
                         self.movement[1] = False
+            
+            self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()) , (0,0))
             
             pygame.display.update()
             self.clock.tick(fps)
